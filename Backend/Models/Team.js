@@ -6,6 +6,6 @@ const teamSchema = new mongoose.Schema({
   data: {type: mongoose.Schema.Types.Mixed, default: {}, required:true}, 
   teamText: {type: String, required: true, required:true}, 
   summary: {type: [[String]], default: [], required:true}
-}, {collection: 'Teams'});
+}, {collection: 'Teams', timestamps: true });
 
 module.exports = mongoose.model('Team', teamSchema);

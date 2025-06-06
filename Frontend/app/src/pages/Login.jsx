@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavBar from "./NavBar"
 import {API_BASE_URL} from "../global"
+import { Link } from 'react-router-dom';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -77,6 +78,7 @@ export default function Login() {
           {message}
         </p>
       )}
+      <span style = {{display:"block"}}>New? <Link to="/register">Click here to register</Link></span>
     </div>
     </>
   )

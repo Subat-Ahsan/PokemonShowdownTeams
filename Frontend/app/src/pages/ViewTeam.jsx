@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom';
 import {API_BASE_URL} from "../global"
 import { useNavigate } from 'react-router-dom';
-
+import { deleteTeam } from '../utils/deleteTeam';
 import ViewPkmn from "./ViewPkmn"
 import NavBar from "./NavBar"
 
@@ -14,10 +14,16 @@ export default function ViewTeam() {
   const [dataJson, setDataJson] = useState({})
   const [copyParts, setCopyParts] = useState([])
   const [viewMode, setViewMode] = useState(true)
+  const navigate = useNavigate();
+
+  const deleteTeamHere = (id) => deleteTeam(id, API_BASE_URL,null, null, 
+    ((dataJson.user && dataJson.user.username) ? "/viewUser/"+dataJson.user.username : "/")
+    , navigate )
+
   const switchMode = () => {
     setViewMode(!viewMode)
   }
-  const navigate = useNavigate();
+  
   useEffect(() => {
     const func = async () =>{
       try {
@@ -30,11 +36,11 @@ export default function ViewTeam() {
         if (response.ok) {
             const jsonOut = await response.json();
             setDataJson(jsonOut)
-            setData(JSON.stringify(jsonOut));
+            setData("");
             setCopyParts((jsonOut.teamText || '').split('\n\n'));
         } else {
             setDataJson({})
-            setData(data.error || 'Not Found');
+            setData('Not Found');
             setCopyParts([])
         }
       } catch{
@@ -48,17 +54,24 @@ export default function ViewTeam() {
   return (
     <>
     <NavBar />
+    
     <div style = {{fontSize: "1.5rem", fontWeight: "bold", margin: "0 0 10px 0", 
       display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '30px'}}>
+        {data && <div>{data}</div>}
       <span>{dataJson.name && dataJson.name}
       <br/>
       {dataJson.user  && dataJson.user.username && 
       <a onClick={e => {e.preventDefault(); navigate("/viewUser/"+dataJson.user.username)}}
       >{"  By:  " + dataJson.user.username}</a>}</span>
-      <button style = {{fontSize: "1rem", padding:'5px 20px', backgroundColor: "#383f4a"}}
+      {!data &&<button style = {{fontSize: "1rem", padding:'5px 20px', backgroundColor: "#383f4a"}}
       onClick = {switchMode}>
         {viewMode ? "Copy" : "View"}
-      </button>
+      </button>}
+      {(dataJson.user && dataJson.user.username == localStorage.getItem("username") && !data) && 
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '0.5rem' }}>
+              <button onClick = {() => {navigate("/editTeam/"+teamID)}}>✏️</button>
+              <button onClick={() => deleteTeamHere(teamID)} >🗑️</button>
+      </div>}
     </div>
 
 

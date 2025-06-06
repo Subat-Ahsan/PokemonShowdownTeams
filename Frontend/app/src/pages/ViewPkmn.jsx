@@ -15,7 +15,7 @@ export default function ViewPkmn({data, summary, copy}) {
       {name}
       {
       Object.entries(vals).map(([key, value], index) => {
-        return <span style = {{color: colors[index]}}>{value + '  '}</span>
+        return <span key = {index} style = {{color: colors[index]}}>{value + '  '}</span>
       })
       }
     </span>

@@ -12,6 +12,7 @@ import Upload from "./pages/Upload"
 import ViewTeam from "./pages/ViewTeam"
 import ViewUser from "./pages/ViewUser"
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import EditTeam from './pages/EditTeam';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: 'viewTeam/:teamid',
     element: <ViewTeam />
+  },
+  {
+    path: 'editTeam/:teamid',
+    element: <EditTeam />
   }
 ])
 createRoot(document.getElementById('root')).render(

@@ -4,21 +4,30 @@ import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
 import {API_BASE_URL} from "../global"
 import Swal from 'sweetalert2';
+import { useParams } from 'react-router-dom';
 
  
 import ViewPkmn from './ViewPkmn';
-export default function Upload() {
+
+export default function EditTeam() {
   const navigate = useNavigate();
   const [textMode,setTextMode] = useState(true);
+
   const [title, setTitle] = useState('Untitled');
   const [loading, setLoading] = useState(false);
+
   const [editTitle, setEditTitle] = useState(false);
   const [inputText, setInputText] = useState("")
+
+  const [teamError, setTeamError] = useState("")
   const inputRef = useRef(null);
 
   const [viewError, setViewError] = useState("")
   const [teamInfo, setTeamInfo] = useState({})
-  
+
+  const params = useParams()
+  const teamID = params.teamid
+
   const exitTitleEdit = () => {
     setEditTitle(false);
     if (!title){
@@ -60,11 +69,11 @@ export default function Upload() {
       setTextMode(true)
     }
   }
-  const uploadTeam = async () => {
+  const editTeam = async () => {
     try {
       setLoading(true)
       const token = localStorage.getItem('token')
-      const response = await fetch(API_BASE_URL + '/data/uploadTeam', {
+      const response = await fetch(API_BASE_URL + '/data/editTeam/'+teamID, {
                     method: 'POST',
                     headers: {
                     'Content-Type': 'application/json',
@@ -76,7 +85,7 @@ export default function Upload() {
         if (response.ok) {
            Swal.fire({
             icon: 'success',
-            title: 'Team created successfully!',
+            title: 'Team Edited successfully!',
             confirmButtonText: 'Okay',}) .then((result) => {
             if (result.isConfirmed) {
               navigate('/ViewTeam/' + data.teamId);
@@ -106,6 +115,26 @@ export default function Upload() {
     if (!username) {
       navigate('/login');
     }
+    const func = async () =>{
+        try {
+        const response = await fetch(API_BASE_URL + '/data/teams/' + teamID, {
+          method: 'GET',
+          headers: {
+          'Content-Type': 'application/json',
+          }
+          });
+          if (response.ok) {
+              const jsonOut = await response.json();
+              setTitle(jsonOut.name);
+              setInputText(jsonOut.teamText);
+          } else {
+              setTeamError("Not found")
+          }
+        } catch (err) {
+          setTeamError("Error: "+ err.message)
+        }
+    }
+    func()
   }, []);
 
   useEffect(() => {
@@ -117,15 +146,16 @@ export default function Upload() {
   return (
     <>
     <NavBar />
+    {teamError ? <div className='titleText'>{teamError}</div> :
     <div style = {{display: 'flex', flexDirection: 'row', gap: "1rem", alignItems: 'flex-start',
       padding: "0 12%"
     }}>
       <div style = {{display: 'flex', flexDirection: 'column', gap: "1rem", 
         alignItems: 'center', fontSize: "1.5rem", flexShrink: 0
         , padding: "20px", position: 'sticky',  top: 0}}>
-        <h2 style = {{fontSize: "2rem", margin: "0 0"}}>Upload</h2>   
+        <h2 style = {{fontSize: "2rem", margin: "0 0"}}>Save</h2>   
         <button disabled = {loading} onClick={changeView} >{textMode ? "View" : "Edit"}</button>
-        <button disabled = {loading} onClick={uploadTeam}>Upload</button>
+        <button disabled = {loading} onClick={editTeam}>Save</button>
       </div>  
 
       <div style = {{flexGrow: 1, display: 'flex', flexDirection: 'column', gap: "1rem",
@@ -163,7 +193,8 @@ export default function Upload() {
         )}
         <textarea  value={inputText}onChange={(e) => setInputText(e.target.value)}
           style = {{width: 600, height: 660, fontSize: "1.1rem", padding: "1rem", resize: 'none'}}/>
-        </>) : <div> 
+        </>) : 
+        <div> 
           {viewError ? <div style = {{whiteSpace: 'pre-wrap', fontSize: '1.5rem'}}>{viewError}</div> : 
           <div>
             <div style={{
@@ -183,13 +214,11 @@ export default function Upload() {
                 ))}
             </div>
           </div>
-        } 
-        
+        }
         </div>
         }
       </div>
-      
-    </div>
+    </div>}
     </>
   )
 }

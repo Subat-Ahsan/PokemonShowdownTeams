@@ -1,9 +1,11 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function NavBar() {
   const [username, setUsername] = useState(null);
+  const navigate = useNavigate();
   
   useEffect(() => {
     const savedUsername = localStorage.getItem('username');
@@ -14,13 +16,16 @@ export default function NavBar() {
     localStorage.removeItem('username');
     localStorage.removeItem('token');
     setUsername(null);
-    
+    navigate('/login');
   };
 
   return (
     <nav style={styles.nav}>
         <div style={styles.left}>
-            <Link className="nav-link" to="/" style={styles.link}>Home</Link>
+            <span  ><Link className="nav-link" to="/" style={styles.link}>Home</Link></span>
+            <span><Link className="nav-link" to="/upload" style={styles.link}>Upload</Link></span>
+            {username && <Link className="nav-link" to={"/viewUser/"+username} 
+            style={styles.link}>Profile</Link>}
         </div>
         <div style={styles.right}>
             {username ? (
@@ -55,6 +60,8 @@ const styles = {
   left: {
     fontWeight: 'bold',
     fontSize: "2rem",
+    display: 'flex', 
+    gap: '20px'
   },
   right: {
     display: 'flex',

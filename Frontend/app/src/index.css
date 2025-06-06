@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.titleText {
+  font-size: 1.5rem;
+}
+
 #root {
   margin: 0 0;
   width: 100%;

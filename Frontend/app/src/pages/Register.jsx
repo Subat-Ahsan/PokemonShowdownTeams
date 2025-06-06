@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavBar from "./NavBar"
 import {API_BASE_URL} from "../global"
+import { Link } from 'react-router-dom';
+
+import Swal from 'sweetalert2';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -23,13 +26,22 @@ export default function Register() {
         });
         if (!response.ok) {
             const errorData = await response.json();
-            setMessage(`Error: ${errorData.message || response.statusText}`);
+            setMessage(`Error: ${errorData.error || response.statusText}`);
         } else {
+          
             const data = await response.json();
             setMessage(`Success: ${data.message || 'User created!'}`);
             setUsername('');
             setPassword('');
-            navigate('/login');
+            
+            Swal.fire({
+              title: 'Success!',
+              text: 'User created successfully.',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            }).then((result) => {
+              navigate('/login');
+            })
         }
     } catch (error) {
       setMessage(`Network error: ${error.message}`);
@@ -81,6 +93,7 @@ export default function Register() {
           {message}
         </p>
       )}
+      <span style = {{display:"block"}}><Link to="/login">Click here to login</Link></span>
     </div>
      </>
   )
