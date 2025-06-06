@@ -158,15 +158,19 @@ router.get('/teams/:teamid', async (req,res) => {
     }
 })
 
-router.get('/sprite/:spriteName', (req, res) => {
-  const spriteName = path.basename(req.params.spriteName);
-  const imagePath = path.join(process.env.SPRITE_PATH, (spriteName+".png"));
-  res.sendFile(imagePath, (err) => {
-    if (err){
-         res.status(404).json({ error: 'File not found' });
-    }
-   
-  });
-});
+router.get('/sprite/:spriteName', async (req, res) => {
+  try {
+    const spriteName = path.basename(req.params.spriteName);
+    const spriteDir = path.resolve(process.env.SPRITE_PATH);
+    const imagePath = path.join(spriteDir, spriteName + ".png");
 
+    res.sendFile(imagePath, (err) => {
+      if (err) {
+        return res.status(404).json({ error: 'File not found' });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message || 'Internal Server Error' });
+  }
+})
 module.exports = router;
