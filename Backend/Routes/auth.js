@@ -87,4 +87,8 @@ router.get('/test', verify_jwt, async (req, res) => {
     return res.status(200).json({name: req.user.username});
 })
 
+router.get('/test', async (req, res) => {
+    return res.status(200).json({message: "OK"});
+})
+
 module.exports = router;

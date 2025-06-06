@@ -22,5 +22,5 @@ app.use('/users', userRoutes);
 app.use('/data', dataRoutes);
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on ${port}`);
 });
