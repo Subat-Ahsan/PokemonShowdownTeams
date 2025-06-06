@@ -146,7 +146,7 @@ export default function EditTeam() {
   return (
     <>
     <NavBar />
-    {teamError ? <div className='titleText'>{teamError}</div> :
+    {teamError ? <div className='errorText'>{teamError}</div> :
     <div style = {{display: 'flex', flexDirection: 'row', gap: "1rem", alignItems: 'flex-start',
       padding: "0 12%"
     }}>
@@ -157,7 +157,7 @@ export default function EditTeam() {
         <button disabled = {loading} onClick={changeView} >{textMode ? "View" : "Edit"}</button>
         <button disabled = {loading} onClick={editTeam}>Save</button>
       </div>  
-
+      {loading ? <div className='errorText'>Loading ... </div> : 
       <div style = {{flexGrow: 1, display: 'flex', flexDirection: 'column', gap: "1rem",
         alignItems: 'center', borderLeft: "#3464eb solid 3px"}}>
         {textMode ? (<>
@@ -217,7 +217,7 @@ export default function EditTeam() {
         }
         </div>
         }
-      </div>
+      </div>}
     </div>}
     </>
   )

@@ -127,7 +127,7 @@ export default function Upload() {
         <button disabled = {loading} onClick={changeView} >{textMode ? "View" : "Edit"}</button>
         <button disabled = {loading} onClick={uploadTeam}>Upload</button>
       </div>  
-
+      {loading ? <div className='errorText'>Loading ...</div> :
       <div style = {{flexGrow: 1, display: 'flex', flexDirection: 'column', gap: "1rem",
         alignItems: 'center', borderLeft: "#3464eb solid 3px"}}>
         {textMode ? (<>
@@ -187,7 +187,7 @@ export default function Upload() {
         
         </div>
         }
-      </div>
+      </div>}
       
     </div>
     </>

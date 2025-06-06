@@ -22,6 +22,7 @@ export default function ViewUser() {
   const [curPage, setCurPage] = useState(1)
   const [refresh, setRefresh] = useState(false)
   const [userSearch, setUserSearch] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -64,7 +65,7 @@ export default function ViewUser() {
         if (search){
           url.searchParams.append('search', search);
         }
-        
+        setLoading(true);
         const response = await fetch(url.toString(), {
             method: 'GET',
             headers: {
@@ -86,6 +87,8 @@ export default function ViewUser() {
         setDataJson({})
         setTeamCount(0)
         setData("Error: "+ err.message)
+    } finally {
+      setLoading(false)
     }}
     func();
     window.scrollTo(0, 0);
@@ -94,6 +97,7 @@ export default function ViewUser() {
     <>
       <NavBar />
       <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: "1rem" }}>{user}'s Teams</div>
+      {loading ?  <div className='errorText'>Loading ...</div> : <>
       <div>
       <input
           id="username"
@@ -135,6 +139,7 @@ export default function ViewUser() {
         <button disabled>{curPage}</button>
         <button onClick={goNextPage} disabled={curPage >= Math.ceil(teamCount / 10)}>›</button>
       </div>
+      </>}
     </>
   )
 }

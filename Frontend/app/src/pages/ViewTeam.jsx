@@ -14,6 +14,7 @@ export default function ViewTeam() {
   const [dataJson, setDataJson] = useState({})
   const [copyParts, setCopyParts] = useState([])
   const [viewMode, setViewMode] = useState(true)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
   const deleteTeamHere = (id) => deleteTeam(id, API_BASE_URL,null, null, 
@@ -27,6 +28,7 @@ export default function ViewTeam() {
   useEffect(() => {
     const func = async () =>{
       try {
+        setLoading(true)
         const response = await fetch(API_BASE_URL + '/data/teams/' + teamID, {
             method: 'GET',
             headers: {
@@ -47,6 +49,8 @@ export default function ViewTeam() {
         setDataJson({})
         setData("Error: "+ err.message)
         setCopyParts([])
+      } finally {
+        setLoading(false)
       }
     }
     func()
@@ -55,6 +59,8 @@ export default function ViewTeam() {
     <>
     <NavBar />
     
+    {loading ? <div className='errorText'>Loading ...</div> : 
+    <>
     <div style = {{fontSize: "1.5rem", fontWeight: "bold", margin: "0 0 10px 0", 
       display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '30px'}}>
         {data && <div>{data}</div>}
@@ -102,6 +108,7 @@ export default function ViewTeam() {
         }}
       />
       }
+      </>}
     </>
   )
 }
