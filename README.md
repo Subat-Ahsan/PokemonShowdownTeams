@@ -1,6 +1,9 @@
 # Pokemon Showdown Teams
 **Tech used:** Javascript, HTML, CSS, React.js, Express.js, MongoDB
 
+**Try it!** https://pkmnshowdownteams.onrender.com/viewUser/Subat
+<br>
+
 ## Overview
 Pokemon Showdown Teams is a web app that lets people upload, explore, and copy teams in the
 [Pokemon Showdown Team Export Format.](https://github.com/smogon/pokemon-showdown/blob/master/sim/TEAMS.md#export-format)
